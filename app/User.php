@@ -20,4 +20,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', //so everytime we return a user object, password is hidden
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 }
