@@ -18,14 +18,34 @@ class AuthController extends Controller
 
             $token = $user->createToken('admin')->accessToken;
 
-            return [
+            $cookie = cookie('jwt', $token, 3600);
+
+            return response([
                 'token' => $token
-            ];
+            ])->withCookie($cookie);
         }
 
         return response([
             'token' => 'Invalid Credentials!'
         ], Response::HTTP_UNAUTHORIZED);
+
+        /**
+         * Also update supports_credentials to true in config/cors.php
+         * 
+         * Now even though we are sending the cookie from the frontend, 
+         * We need laravel Passport to use it
+         * So we have to fake how to set the bearer token via the cookie
+         */
+    }
+
+    public function logout()
+    {
+
+        $cookie = cookie()->forget('jwt');
+
+        return response([
+            'message' => 'success'
+        ])->withCookie($cookie);
     }
 
     public function register(RegisterRequest $request)

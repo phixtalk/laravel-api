@@ -10,6 +10,7 @@ use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,6 +18,8 @@ class UserController extends Controller
 {
     public function index()
     {
+        Gate::authorize('view', 'users'); // define view - users abilities in AuthServiceProvider
+
         $users = User::paginate();
 
         return UserResource::collection($users);
@@ -24,6 +27,8 @@ class UserController extends Controller
 
     public function show($id)
     {
+        Gate::authorize('view', 'users');
+
         $user = User::find($id);
 
         return new UserResource($user);
@@ -31,6 +36,7 @@ class UserController extends Controller
 
     public function store(UserCreateRequest $request)
     {
+        Gate::authorize('edit', 'users');
         // $user = User::create($request->all());
         $user = User::create(
             $request->only('first_name', 'last_name', 'email', 'role_id') + [
@@ -43,6 +49,8 @@ class UserController extends Controller
 
     public function update(UserUpdateRequest $request, $id)
     {
+        Gate::authorize('edit', 'users');
+
         $user = User::find($id);
 
         $user->update($request->only('first_name', 'last_name', 'email', 'role_id')); //we can still update the table even if any of the fields is missing
@@ -52,6 +60,8 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        Gate::authorize('edit', 'users');
+
         User::destroy($id);
 
         return response(null, Response::HTTP_NO_CONTENT);
@@ -59,7 +69,19 @@ class UserController extends Controller
 
     public function user()
     {
-        return new UserResource(Auth::user());
+        $user = Auth::user();
+
+        /**
+         * Here we want to add an additional field to this output response
+         * without adding it in the UserResource class.
+         * We also need to follow the current output format when adding new fields
+         * as seen in below with the data object
+         */
+        return (new UserResource($user))->additional([
+            'data' => [
+                'permissions' => $user->permissions()
+            ]
+        ]);
     }
 
     public function updateInfo(UpdateInfoRequest $request)

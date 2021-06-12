@@ -9,6 +9,7 @@ $factory->define(Order::class, function (Faker $faker) {
     return [
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
-        'email' => $faker->email
+        'email' => $faker->email,
+        'created_at' => $faker->dateTime,
     ];
 });
