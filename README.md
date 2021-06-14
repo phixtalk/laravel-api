@@ -1,6 +1,8 @@
 ## About Laravel API Application
 
-This project is a simple laravel api implementation that have the following features:
+This project is a complete laravel api implementation that provides all the necessary configurations
+and follows RESTFUL practises to implements a simple admin backend application.
+The following features are contained in this application:
 
 -   Laravel Best Practises
 -   Create REST API's using laravel
@@ -11,4 +13,6 @@ This project is a simple laravel api implementation that have the following feat
 -   Permissions Authorization with Laravel Gates
 -   HttpOnly Cookies Login System
 -   Export CSV's
--   API Documentation using Swagger
+-   API Documentation using Open Api (Swagger)
+
+References: Special thanks to Antonio
