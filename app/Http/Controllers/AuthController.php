@@ -35,6 +35,8 @@ class AuthController extends Controller
          * Now even though we are sending the cookie from the frontend, 
          * We need laravel Passport to use it
          * So we have to fake how to set the bearer token via the cookie
+		 * also overwrite the handle method in App\Http\Middleware\Authenticate.php
+		 * so as to manually set the headers for Authorization
          */
     }
 

@@ -130,7 +130,7 @@ class UserController extends Controller
 
         $user = User::find($id);
 
-        $user->update($request->only('first_name', 'last_name', 'email', 'role_id')); //we can still update the table even if any of the fields is missing
+        $user->update($request->only('first_name', 'last_name', 'email', 'role_id')); //we can still update the table even if any of these fields are missing, but these are the only fields that can be updated via this method
 
         return response(new UserResource($user), Response::HTTP_ACCEPTED);
     }
